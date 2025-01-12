@@ -19,21 +19,21 @@ namespace BT1_ScheduleStudent
             options.UseNpgsql(Configuration.GetConnectionString("Connection"));
         }
 
-        DbSet<Course> Courses { get; set; }
-        DbSet<Enrollment> Enrollments { get; set; }
-        DbSet<Student> Students { get; set; }
+        DbSet<Course> Course { get; set; }
+        DbSet<Enrollment> Enrollment { get; set; }
+        DbSet<Student> Student { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Enrollment>()
                 .HasOne(e => e.Student)
-                .WithMany(s => s.Enrollments)
+                .WithMany(s => s.Enrollment)
                 .HasForeignKey(e => e.StudentID)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Enrollment>()
                 .HasOne(e => e.Course)
-                .WithMany(c => c.Enrollments)
+                .WithMany(c => c.Enrollment)
                 .HasForeignKey(e => e.CourseID)
                 .OnDelete(DeleteBehavior.Cascade);
         }

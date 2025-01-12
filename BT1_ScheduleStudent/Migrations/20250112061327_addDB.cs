@@ -11,7 +11,7 @@ namespace BT1_ScheduleStudent.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Courses",
+                name: "Course",
                 columns: table => new
                 {
                     CourseID = table.Column<int>(type: "integer", nullable: false)
@@ -21,11 +21,11 @@ namespace BT1_ScheduleStudent.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Courses", x => x.CourseID);
+                    table.PrimaryKey("PK_Course", x => x.CourseID);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Students",
+                name: "Student",
                 columns: table => new
                 {
                     StudentID = table.Column<int>(type: "integer", nullable: false)
@@ -36,11 +36,11 @@ namespace BT1_ScheduleStudent.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Students", x => x.StudentID);
+                    table.PrimaryKey("PK_Student", x => x.StudentID);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Enrollments",
+                name: "Enrollment",
                 columns: table => new
                 {
                     EnrollmentID = table.Column<int>(type: "integer", nullable: false)
@@ -51,42 +51,42 @@ namespace BT1_ScheduleStudent.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Enrollments", x => x.EnrollmentID);
+                    table.PrimaryKey("PK_Enrollment", x => x.EnrollmentID);
                     table.ForeignKey(
-                        name: "FK_Enrollments_Courses_CourseID",
+                        name: "FK_Enrollment_Course_CourseID",
                         column: x => x.CourseID,
-                        principalTable: "Courses",
+                        principalTable: "Course",
                         principalColumn: "CourseID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Enrollments_Students_StudentID",
+                        name: "FK_Enrollment_Student_StudentID",
                         column: x => x.StudentID,
-                        principalTable: "Students",
+                        principalTable: "Student",
                         principalColumn: "StudentID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Enrollments_CourseID",
-                table: "Enrollments",
+                name: "IX_Enrollment_CourseID",
+                table: "Enrollment",
                 column: "CourseID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Enrollments_StudentID",
-                table: "Enrollments",
+                name: "IX_Enrollment_StudentID",
+                table: "Enrollment",
                 column: "StudentID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Enrollments");
+                name: "Enrollment");
 
             migrationBuilder.DropTable(
-                name: "Courses");
+                name: "Course");
 
             migrationBuilder.DropTable(
-                name: "Students");
+                name: "Student");
         }
     }
 }
