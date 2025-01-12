@@ -11,6 +11,6 @@ namespace BT1_ScheduleStudent.Model
         public string Title { get; set; }
         public string Creadits { get; set; }
 
-        public ICollection<Enrollment> Enrollments { get; set; }
+        public ICollection<Enrollment> Enrollment { get; set; }
     }
 }

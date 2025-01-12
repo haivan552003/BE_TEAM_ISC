@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BT1_ScheduleStudent.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250112060253_addDB")]
+    [Migration("20250112061327_addDB")]
     partial class addDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,7 +42,7 @@ namespace BT1_ScheduleStudent.Migrations
 
                     b.HasKey("CourseID");
 
-                    b.ToTable("Courses");
+                    b.ToTable("Course");
                 });
 
             modelBuilder.Entity("BT1_ScheduleStudent.Model.Enrollment", b =>
@@ -69,7 +69,7 @@ namespace BT1_ScheduleStudent.Migrations
 
                     b.HasIndex("StudentID");
 
-                    b.ToTable("Enrollments");
+                    b.ToTable("Enrollment");
                 });
 
             modelBuilder.Entity("BT1_ScheduleStudent.Model.Student", b =>
@@ -93,19 +93,19 @@ namespace BT1_ScheduleStudent.Migrations
 
                     b.HasKey("StudentID");
 
-                    b.ToTable("Students");
+                    b.ToTable("Student");
                 });
 
             modelBuilder.Entity("BT1_ScheduleStudent.Model.Enrollment", b =>
                 {
                     b.HasOne("BT1_ScheduleStudent.Model.Course", "Course")
-                        .WithMany("Enrollments")
+                        .WithMany("Enrollment")
                         .HasForeignKey("CourseID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BT1_ScheduleStudent.Model.Student", "Student")
-                        .WithMany("Enrollments")
+                        .WithMany("Enrollment")
                         .HasForeignKey("StudentID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -117,12 +117,12 @@ namespace BT1_ScheduleStudent.Migrations
 
             modelBuilder.Entity("BT1_ScheduleStudent.Model.Course", b =>
                 {
-                    b.Navigation("Enrollments");
+                    b.Navigation("Enrollment");
                 });
 
             modelBuilder.Entity("BT1_ScheduleStudent.Model.Student", b =>
                 {
-                    b.Navigation("Enrollments");
+                    b.Navigation("Enrollment");
                 });
 #pragma warning restore 612, 618
         }
