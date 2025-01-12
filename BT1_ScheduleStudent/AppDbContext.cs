@@ -19,9 +19,9 @@ namespace BT1_ScheduleStudent
             options.UseNpgsql(Configuration.GetConnectionString("Connection"));
         }
 
-        DbSet<Course> Course { get; set; }
-        DbSet<Enrollment> Enrollment { get; set; }
-        DbSet<Student> Student { get; set; }
+        public DbSet<Course> Course { get; set; }
+        public DbSet<Enrollment> Enrollment { get; set; }
+        public DbSet<Student> Student { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
