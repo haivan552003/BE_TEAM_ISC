@@ -59,5 +59,25 @@ namespace BT1_ScheduleStudent.Controllers
                 return StatusCode(500, "Đã xảy ra lỗi trong hệ thống.");
             }
         }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<EnrollmentRes>> PutEnrollment(int id, EnrollmentReq req)
+        {
+            var response = await _EnrollmentService.UpdateEnrollment(id, req);
+            return Ok(new { status = 1, decription = response });
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<EnrollmentRes>> DeleteEnrollment(int id)
+        {
+            var result = await _EnrollmentService.DeleteEnrollment(id);
+
+            if (!result)
+            {
+                return NotFound(new { status = 0, decription = "Xóa thất bại" });
+            }
+
+            return Ok(new { status = 1, decription = "Xóa thành công" });
+        }
     }
 }
