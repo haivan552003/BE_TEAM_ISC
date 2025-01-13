@@ -88,15 +88,20 @@ namespace BT1_ScheduleStudent.Services
 
         private void ValidateEnrollmentRequest(EnrollmentReq req)
         {
-            if (!int.TryParse(req.CourseID.ToString(), out _))
+            if (req == null)
             {
-                throw new FormatException("CourseID phải là một số nguyên hợp lệ.");
+                throw new FormatException("Dữ liệu yêu cầu không được để trống.");
             }
 
-            if (!int.TryParse(req.StudentID.ToString(), out _))
-            {
-                throw new FormatException("StudentID phải là một số nguyên hợp lệ.");
-            }
+            //if (!int.TryParse(req.CourseID.ToString(), out _))
+            //{
+            //    throw new FormatException("CourseID phải là một số nguyên hợp lệ.");
+            //}
+
+            //if (!int.TryParse(req.StudentID.ToString(), out _))
+            //{
+            //    throw new FormatException("StudentID phải là một số nguyên hợp lệ.");
+            //}
 
             if (string.IsNullOrWhiteSpace(req.Grade))
             {
