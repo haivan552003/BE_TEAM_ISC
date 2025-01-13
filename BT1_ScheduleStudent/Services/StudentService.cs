@@ -17,23 +17,44 @@ namespace BT1_ScheduleStudent.Services
         {
             if (Req == null)
             {
-                throw new ArgumentNullException(nameof(Req), "Request data is required.");
+                throw new ArgumentNullException(nameof(Req), "Thông tin yêu cầu không được để trống.");
             }
 
             if (string.IsNullOrWhiteSpace(Req.LastName))
             {
-                throw new ArgumentException("LastName is required.");
+                throw new ArgumentException("Họ không được để trống.");
+            }
+
+            if (Req.LastName.Length > 15)
+            {
+                throw new ArgumentException("Họ không được dài quá 15 ký tự.");
+            }
+
+            if (!IsValidVietnameseName(Req.LastName))
+            {
+                throw new ArgumentException("Họ không chứa kí tự đặc biệt.");
             }
 
             if (string.IsNullOrWhiteSpace(Req.FirstMidName))
             {
-                throw new ArgumentException("FirstMidName is required.");
+                throw new ArgumentException("Tên đệm và tên không được để trống.");
             }
 
-            if (Req.EnrollmentDate == default)
+            if (Req.FirstMidName.Length > 20)
             {
-                throw new ArgumentException("EnrollmentDate is invalid.");
+                throw new ArgumentException("Tên đệm và tên không được dài quá 20 ký tự.");
             }
+
+            if (!IsValidVietnameseName(Req.FirstMidName))
+            {
+                throw new ArgumentException("Tên đệm và tên không chứa kí tự đặc biệt.");
+            }
+
+            if (Req.EnrollmentDate == default(DateTime))
+            {
+                throw new ArgumentException("Ngày nhập học không được để trống hoặc không hợp lệ.");
+            }
+
             var Student = await _context.Student
                 .Where(e => e.StudentID == id)
                 .FirstOrDefaultAsync();
@@ -52,9 +73,20 @@ namespace BT1_ScheduleStudent.Services
             return new StudentRes();
         }
 
-        // Delete Course
+        private bool IsValidVietnameseName(string name)
+        {
+            var regex = new System.Text.RegularExpressions.Regex(@"^[\p{L}\s]+$");
+            return regex.IsMatch(name);
+        }
+
+        // Delete Student
         public async Task<bool> DeleteStudentAsync(int id)
         {
+            if (id <= 0)
+            {
+                throw new ArgumentException("ID không hợp lệ");
+            }
+
             var Student = await _context.Student
                 .Where(e => e.StudentID == id)
                 .FirstOrDefaultAsync();
