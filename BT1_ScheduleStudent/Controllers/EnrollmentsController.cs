@@ -20,7 +20,7 @@ namespace BT1_ScheduleStudent.Controllers
         public async Task<ActionResult<IEnumerable<EnrollmentRes>>> GetAllEnrollments()
         {
             var response = await _EnrollmentService.GetAllEnrollmentsAsync();
-            return Ok(new { status = 1, decription = response });
+            return Ok(response);
         }
 
         [HttpGet("{id}")]
@@ -31,7 +31,7 @@ namespace BT1_ScheduleStudent.Controllers
             {
                 return NotFound();
             }
-            return Ok(new { status = 1, decription = response });
+            return Ok(response);
         }
 
         [HttpPost]
