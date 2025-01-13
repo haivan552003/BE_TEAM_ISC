@@ -1,4 +1,5 @@
-﻿using BT1_ScheduleStudent.Services;
+﻿using BT1_ScheduleStudent.Request;
+using BT1_ScheduleStudent.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,6 +14,33 @@ namespace BT1_ScheduleStudent.Controllers
         public StudentsController(StudentService StudentService)
         {
             _StudentService = StudentService;
+        }
+        // PUT: api/Courses/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutStudent(int id, StudentReq StudentReq)
+        {
+            var response = await _StudentService.UpdateStudentAsync(id, StudentReq);
+
+            if (response == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(response);
+        }
+
+        // DELETE: api/Courses/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteStudent(int id)
+        {
+            var result = await _StudentService.DeleteStudentAsync(id);
+
+            if (!result)
+            {
+                return NotFound(new { status = 0, decription = "Xóa thất bại" });
+            }
+
+            return Ok(new { status = 1, decription = "Xóa thành công" });
         }
     }
 }
