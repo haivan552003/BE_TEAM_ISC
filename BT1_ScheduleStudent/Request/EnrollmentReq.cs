@@ -6,8 +6,6 @@ namespace BT1_ScheduleStudent.Request
     {
         public int CourseID { get; set; }
         public int StudentID { get; set; }
-
-        [Required(ErrorMessage = "Grade not null")]
         public string Grade { get; set; }
     }
 }

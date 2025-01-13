@@ -36,7 +36,7 @@ namespace BT1_ScheduleStudent.Services
             var results = await _context.Enrollment
                 .Where(e => e.EnrollmentID == id)
                 .FirstOrDefaultAsync();
-            if(results == null)
+            if (results == null)
             {
                 return null;
             }
@@ -49,11 +49,12 @@ namespace BT1_ScheduleStudent.Services
                     Grade = results.Grade,
                     StudentID = results.StudentID,
                 };
-            }  
+            }
         }
 
         public async Task<EnrollmentRes> CreateEnrollmentAsync(EnrollmentReq req)
         {
+            ValidateEnrollmentRequest(req);
             var courseExist = await _context.Course
                               .AnyAsync(course => course.CourseID == req.CourseID);
             if (!courseExist)
@@ -84,6 +85,30 @@ namespace BT1_ScheduleStudent.Services
                 Grade = enrollment.Grade,
             };
         }
+
+        private void ValidateEnrollmentRequest(EnrollmentReq req)
+        {
+            if (!int.TryParse(req.CourseID.ToString(), out _))
+            {
+                throw new FormatException("CourseID phải là một số nguyên hợp lệ.");
+            }
+
+            if (!int.TryParse(req.StudentID.ToString(), out _))
+            {
+                throw new FormatException("StudentID phải là một số nguyên hợp lệ.");
+            }
+
+            if (string.IsNullOrWhiteSpace(req.Grade))
+            {
+                throw new ArgumentException("Grade không được bỏ trống.", nameof(req.Grade));
+            }
+
+            if (req.Grade.Length >= 10)
+            {
+                throw new ArgumentException("Grade không được vượt quá 10 ký tự.", nameof(req.Grade));
+            }
+        }
+
 
     }
 }

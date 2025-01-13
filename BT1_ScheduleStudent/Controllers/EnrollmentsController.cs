@@ -17,7 +17,7 @@ namespace BT1_ScheduleStudent.Controllers
             _EnrollmentService = EnrollmentService;
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<EnrollmentRes>>> GetAllEnrollments() 
+        public async Task<ActionResult<IEnumerable<EnrollmentRes>>> GetAllEnrollments()
         {
             var response = await _EnrollmentService.GetAllEnrollmentsAsync();
             return Ok(new { status = 1, decription = response });
@@ -27,17 +27,33 @@ namespace BT1_ScheduleStudent.Controllers
         public async Task<ActionResult<EnrollmentRes>> GetEnrollment(int id)
         {
             var response = await _EnrollmentService.GetEnrollmentByIdAsync(id);
-            if(response == null)
+            if (response == null)
             {
                 return NotFound();
             }
             return Ok(new { status = 1, decription = response });
         }
+
         [HttpPost]
         public async Task<ActionResult<EnrollmentRes>> PostEnrollment(EnrollmentReq req)
         {
-            var response = await _EnrollmentService.CreateEnrollmentAsync(req);
-         return Ok(new { status = 1, decription = response });
+            try
+            {
+                var response = await _EnrollmentService.CreateEnrollmentAsync(req);
+                return Ok(response);
+            }
+            catch (FormatException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Đã xảy ra lỗi trong hệ thống.", details = ex.Message });
+            }
         }
     }
 }
