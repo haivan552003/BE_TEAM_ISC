@@ -44,6 +44,10 @@ namespace BT1_ScheduleStudent.Controllers
         public async Task<ActionResult<StudentRes>> PostStudent(StudentReq StudentReq)
         {
             var response = await _StudentService.CreateStudentAsync(StudentReq);
+            if (!string.IsNullOrEmpty(response))
+            {
+                return BadRequest(response);
+            }
             return Ok();
         }
 
