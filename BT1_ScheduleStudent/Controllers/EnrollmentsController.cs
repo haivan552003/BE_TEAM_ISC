@@ -18,11 +18,16 @@ namespace BT1_ScheduleStudent.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<EnrollmentRes>> PutEnrollment(int id, EnrollmentReq req)
+        public async Task<IActionResult> PutEnrollment(int id, EnrollmentReq req)
         {
-            var response = await _EnrollmentService.UpdateEnrollment(id, req);
-            return Ok(new { status = 1, decription = response });
+            var response = await _enrollmentService.UpdateEnrollment(id, req);
+            if (response.Status == 0)
+            {
+                return BadRequest(new { response.Status, response.Message });
+            }
+            return Ok(new { response.Status, response.Message, response.Data });
         }
+
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<EnrollmentRes>> DeleteEnrollment(int id)

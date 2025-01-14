@@ -14,44 +14,80 @@ namespace BT1_ScheduleStudent.Services
             _context = context;
         }
 
-        public async Task<EnrollmentRes> UpdateEnrollment(int id, EnrollmentReq req)
+        public class ResponseWrapper<T>
         {
-            ValidateEnrollmentRequest(req);
+            public int Status { get; set; }
+            public string Message { get; set; }
+            public T Data { get; set; }
+        }
 
-            var enrollmentExist = await _context.Enrollment
-            .FirstOrDefaultAsync(e => e.EnrollmentID == id);
-
-            if (enrollmentExist == null)
+        public async Task<ResponseWrapper<EnrollmentRes>> UpdateEnrollment(int id, EnrollmentReq req)
+        {
+            try
             {
-                throw new KeyNotFoundException($"Không tìm thấy Enrollment với Id {id}.");
-            }
+                ValidateEnrollmentRequest(req);
 
-            var courseExist = await _context.Course
-                .AnyAsync(course => course.CourseID == req.CourseID);
-            if (!courseExist)
+                var enrollmentExist = await _context.Enrollment
+                    .FirstOrDefaultAsync(e => e.EnrollmentID == id);
+
+                if (enrollmentExist == null)
+                {
+                    return new ResponseWrapper<EnrollmentRes>
+                    {
+                        Status = 0,
+                        Message = $"Không tìm thấy Enrollment với Id {id}."
+                    };
+                }
+
+                var courseExist = await _context.Course
+                    .AnyAsync(course => course.CourseID == req.CourseID);
+                if (!courseExist)
+                {
+                    return new ResponseWrapper<EnrollmentRes>
+                    {
+                        Status = 0,
+                        Message = $"Không tìm thấy Course với Id {req.CourseID}."
+                    };
+                }
+
+                var studentExist = await _context.Student
+                    .AnyAsync(student => student.StudentID == req.StudentID);
+                if (!studentExist)
+                {
+                    return new ResponseWrapper<EnrollmentRes>
+                    {
+                        Status = 0,
+                        Message = $"Không tìm thấy Student với Id {req.StudentID}."
+                    };
+                }
+
+                enrollmentExist.StudentID = req.StudentID;
+                enrollmentExist.CourseID = req.CourseID;
+                enrollmentExist.Grade = req.Grade;
+
+                await _context.SaveChangesAsync();
+
+                return new ResponseWrapper<EnrollmentRes>
+                {
+                    Status = 1,
+                    Message = "Cập nhật thành công",
+                    Data = new EnrollmentRes
+                    {
+                        EnrollmentID = enrollmentExist.EnrollmentID,
+                        CourseID = enrollmentExist.CourseID,
+                        StudentID = enrollmentExist.StudentID,
+                        Grade = enrollmentExist.Grade
+                    }
+                };
+            }
+            catch (Exception ex)
             {
-                throw new KeyNotFoundException($"Không tìm thấy Course với Id {req.CourseID}.");
+                return new ResponseWrapper<EnrollmentRes>
+                {
+                    Status = 0,
+                    Message = $"Đã xảy ra lỗi: {ex.Message}"
+                };
             }
-
-            var studentExist = await _context.Student
-                .AnyAsync(student => student.StudentID == req.StudentID);
-            if (!studentExist)
-            {
-                throw new KeyNotFoundException($"Không tìm thấy Student với Id {req.StudentID}.");
-            }
-
-            enrollmentExist.StudentID = req.StudentID;
-            enrollmentExist.CourseID = req.CourseID;
-            enrollmentExist.Grade = req.Grade;
-
-            await _context.SaveChangesAsync();
-
-            return new EnrollmentRes {
-                EnrollmentID = enrollmentExist.EnrollmentID,
-                CourseID = enrollmentExist.CourseID,
-                StudentID = enrollmentExist.StudentID,
-                Grade = enrollmentExist.Grade
-            };
         }
 
         public async Task<bool> DeleteEnrollment(int id)
@@ -75,19 +111,18 @@ namespace BT1_ScheduleStudent.Services
         {
             if (req == null)
             {
-                throw new FormatException("Dữ liệu yêu cầu không được để trống.");
+                throw new ArgumentException("Dữ liệu yêu cầu không được để trống.");
             }
 
             if (string.IsNullOrWhiteSpace(req.Grade))
             {
-                throw new ArgumentException("Grade không được bỏ trống.", nameof(req.Grade));
+                throw new ArgumentException("Grade không được bỏ trống.");
             }
 
             if (req.Grade.Length > 10)
             {
-                throw new ArgumentException("Grade không được vượt quá 10 ký tự.", nameof(req.Grade));
+                throw new ArgumentException("Grade không được vượt quá 10 ký tự.");
             }
         }
-
     }
 }
