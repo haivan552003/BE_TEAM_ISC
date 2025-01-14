@@ -26,12 +26,20 @@ namespace BT1_ScheduleStudent.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<EnrollmentRes>> GetEnrollment(int id)
         {
-            var response = await _EnrollmentService.GetEnrollmentByIdAsync(id);
-            if (response == null)
+            try
             {
-                return NotFound();
+                var response = await _EnrollmentService.GetEnrollmentByIdAsync(id);
+                return Ok(response);
             }
-            return Ok(response);
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return NotFound(ex.Message);
+            }
+           
         }
 
         [HttpPost]
@@ -41,18 +49,14 @@ namespace BT1_ScheduleStudent.Controllers
             {
                 var response = await _EnrollmentService.CreateEnrollmentAsync(req);
                 return Ok(response);
-            }
-            catch (FormatException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
+            }           
             catch (ArgumentException ex)
             {
-                return BadRequest(new { message = ex.Message });
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Đã xảy ra lỗi trong hệ thống.", details = ex.Message });
+                return StatusCode(500, "Đã xảy ra lỗi trong hệ thống.");
             }
         }
     }
