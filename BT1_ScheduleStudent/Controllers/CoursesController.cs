@@ -29,7 +29,13 @@ namespace BT1_ScheduleStudent.Controllers
         public async Task<ActionResult<CourseRes>> PostCourse(CourseReq CourseReq)
         {
             var response = await _CourseService.CreateCourseAsync(CourseReq);
-            return Ok();
+
+            if (response is string errorMessage)
+            {
+                return BadRequest(errorMessage);
+            }
+
+            return Ok(response);
         }
 
         // GET: api/Courses/5
@@ -55,6 +61,11 @@ namespace BT1_ScheduleStudent.Controllers
             if (response == null)
             {
                 return NotFound();
+            }
+
+            if (response is StudentRes)
+            {
+                return BadRequest(response);
             }
 
             return Ok(response);

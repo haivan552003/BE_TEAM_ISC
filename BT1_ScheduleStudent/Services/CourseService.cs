@@ -2,6 +2,7 @@
 using BT1_ScheduleStudent.Request;
 using BT1_ScheduleStudent.Response;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace BT1_ScheduleStudent.Services
 {
@@ -31,8 +32,38 @@ namespace BT1_ScheduleStudent.Services
 
 
         // Create Course
-        public async Task<CourseRes> CreateCourseAsync(CourseReq Req)
+        public async Task<object> CreateCourseAsync(CourseReq Req)
         {
+            if (string.IsNullOrWhiteSpace(Req.Title))
+            {
+                return "Title không được bỏ trống.";
+            }
+
+            if (Req.Title.Length > 250)
+            {
+                return "Title quá dài. Tối đa 10 ký tự.";
+            }
+
+            if (!Regex.IsMatch(Req.Title, @"^[a-zA-Z0-9\s]+$"))
+            {
+                return "Title không được chứa ký tự đặc biệt.";
+            }
+
+            if (string.IsNullOrWhiteSpace(Req.Creadits))
+            {
+                return "Số thẻ ngân hàng không được bỏ trống.";
+            }
+
+            if (!Regex.IsMatch(Req.Creadits, @"^\d+$"))
+            {
+                return "Số thẻ ngân hàng chỉ được chứa số.";
+            }
+
+            if (Req.Creadits.Length != 16 && Req.Creadits.Length != 19)
+            {
+                return "Số thẻ ngân hàng phải gồm 16 hoặc 19 chữ số.";
+            }
+
             var Course = new Course
             {
                 Title = Req.Title,
@@ -66,8 +97,38 @@ namespace BT1_ScheduleStudent.Services
         }
 
         // Update Course
-        public async Task<CourseRes> UpdateCourseAsync(int id, CourseReq Req)
+        public async Task<object> UpdateCourseAsync(int id, CourseReq Req)
         {
+            if (string.IsNullOrWhiteSpace(Req.Title))
+            {
+                return "Title không được bỏ trống.";
+            }
+
+            if (Req.Title.Length > 250)
+            {
+                return "Title quá dài.";
+            }
+
+            if (!Regex.IsMatch(Req.Title, @"^[a-zA-Z0-9\s]+$"))
+            {
+                return "Title không được chứa ký tự đặc biệt.";
+            }
+
+            if (string.IsNullOrWhiteSpace(Req.Creadits))
+            {
+                return "Số thẻ ngân hàng không được bỏ trống.";
+            }
+
+            if (!Regex.IsMatch(Req.Creadits, @"^\d+$"))
+            {
+                return "Số thẻ ngân hàng chỉ được chứa số.";
+            }
+
+            if (Req.Creadits.Length != 16 && Req.Creadits.Length != 19)
+            {
+                return "Số thẻ ngân hàng phải gồm 16 hoặc 19 chữ số.";
+            }
+
             var Course = await _context.Course
                 .Where(e => e.CourseID == id)
                 .FirstOrDefaultAsync();
