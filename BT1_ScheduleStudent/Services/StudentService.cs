@@ -1,5 +1,6 @@
 ﻿using BT1_ScheduleStudent.Request;
 using BT1_ScheduleStudent.Response;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace BT1_ScheduleStudent.Services
@@ -13,46 +14,46 @@ namespace BT1_ScheduleStudent.Services
             _context = context;
         }
 
-        public async Task<StudentRes> UpdateStudentAsync(int id, StudentReq Req)
+        public async Task<object> UpdateStudentAsync(int id, StudentReq Req)
         {
             if (Req == null)
             {
-                throw new ArgumentNullException(nameof(Req), "Thông tin yêu cầu không được để trống.");
+                return "Thông tin yêu cầu không được để trống."; 
             }
 
             if (string.IsNullOrWhiteSpace(Req.LastName))
             {
-                throw new ArgumentException("Họ không được để trống.");
+                return "Họ không được để trống.";
             }
 
             if (Req.LastName.Length > 15)
             {
-                throw new ArgumentException("Họ không được dài quá 15 ký tự.");
+                return "Họ không được dài quá 15 ký tự."; 
             }
 
             if (!IsValidVietnameseName(Req.LastName))
             {
-                throw new ArgumentException("Họ không chứa kí tự đặc biệt.");
+                return "Họ không chứa kí tự đặc biệt.";
             }
 
             if (string.IsNullOrWhiteSpace(Req.FirstMidName))
             {
-                throw new ArgumentException("Tên đệm và tên không được để trống.");
+                return "Tên đệm và tên không được để trống.";
             }
 
             if (Req.FirstMidName.Length > 20)
             {
-                throw new ArgumentException("Tên đệm và tên không được dài quá 20 ký tự.");
+                return "Tên đệm và tên không được dài quá 20 ký tự.";
             }
 
             if (!IsValidVietnameseName(Req.FirstMidName))
             {
-                throw new ArgumentException("Tên đệm và tên không chứa kí tự đặc biệt.");
+                return "Tên đệm và tên không chứa kí tự đặc biệt.";
             }
 
             if (Req.EnrollmentDate == default(DateTime))
             {
-                throw new ArgumentException("Ngày nhập học không được để trống hoặc không hợp lệ.");
+                return "Ngày nhập học không được để trống hoặc không hợp lệ.";
             }
 
             var Student = await _context.Student
@@ -61,7 +62,7 @@ namespace BT1_ScheduleStudent.Services
 
             if (Student == null)
             {
-                return null;
+                return "Không tìm thấy sinh viên với ID này.";
             }
 
             Student.LastName = Req.LastName;
