@@ -18,28 +18,6 @@ namespace BT1_ScheduleStudent.Services
         {
             _context = context;
         }
-        public async Task<object> UpdateStudentAsync(int id, StudentReq Req)
-        {
-
-
-            var Student = await _context.Student
-                .Where(e => e.StudentID == id)
-                .FirstOrDefaultAsync();
-
-            if (Student == null)
-            {
-                return "Không tìm thấy sinh viên với ID này.";
-            }
-
-            Student.LastName = Req.LastName;
-            Student.FirstMidName = Req.FirstMidName;
-            Student.EnrollmentDate = Req.EnrollmentDate;
-
-            await _context.SaveChangesAsync();
-
-            return new StudentRes();
-        }
-
 
         public async Task<object> UpdateStudentAsync(int id, StudentReq Req)
         {
@@ -222,11 +200,6 @@ namespace BT1_ScheduleStudent.Services
             await _context.SaveChangesAsync();
 
             return "";
-        }
-        private bool IsValidVietnameseName(string name)
-        {
-            var regex = new System.Text.RegularExpressions.Regex(@"^[\p{L}\s]+$");
-            return regex.IsMatch(name);
         }
     }
 }
