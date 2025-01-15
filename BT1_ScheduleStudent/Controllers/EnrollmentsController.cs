@@ -20,7 +20,7 @@ namespace BT1_ScheduleStudent.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutEnrollment(int id, EnrollmentReq req)
         {
-            var response = await _enrollmentService.UpdateEnrollment(id, req);
+            var response = await _EnrollmentService.UpdateEnrollment(id, req);
             if (response.Status == 0)
             {
                 return BadRequest(new { response.Status, response.Message });
