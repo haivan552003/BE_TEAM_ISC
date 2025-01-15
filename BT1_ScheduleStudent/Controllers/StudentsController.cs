@@ -32,7 +32,7 @@ namespace BT1_ScheduleStudent.Controllers
                 return BadRequest(response);
             }
 
-            return Ok(response);
+            return Ok("Cập nhật thành công");
         }
 
 
