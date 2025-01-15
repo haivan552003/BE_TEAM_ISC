@@ -123,6 +123,11 @@ namespace BT1_ScheduleStudent.Services
             {
                 throw new ArgumentException("Grade không được vượt quá 10 ký tự.");
             }
+
+            if (!System.Text.RegularExpressions.Regex.IsMatch(req.Grade, @"^[a-zA-Z0-9]+$"))
+            {
+                throw new ArgumentException("Grade chỉ được chứa chữ cái và chữ số, không được chứa ký tự đặc biệt.");
+            }
         }
     }
 }
