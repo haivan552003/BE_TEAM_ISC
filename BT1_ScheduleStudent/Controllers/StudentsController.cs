@@ -44,11 +44,11 @@ namespace BT1_ScheduleStudent.Controllers
         public async Task<ActionResult<StudentRes>> PostStudent(StudentReq StudentReq)
         {
             var response = await _StudentService.CreateStudentAsync(StudentReq);
-            if (response != "Thêm thành công")
+            if (response is string errorMessage)
             {
-                return BadRequest(response);
+                return BadRequest(errorMessage);
             }
-            return Ok(response);
+            return Ok("Thêm thành công");
         }
     }
 }

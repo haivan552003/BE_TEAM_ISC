@@ -52,7 +52,7 @@ namespace BT1_ScheduleStudent.Services
         }
 
         // Create Student
-        public async Task<string> CreateStudentAsync(StudentReq Req)
+        public async Task<object> CreateStudentAsync(StudentReq Req)
         {
             if (Req == null)
             {
@@ -106,7 +106,7 @@ namespace BT1_ScheduleStudent.Services
             _context.Student.Add(Student);
             await _context.SaveChangesAsync();
 
-            return "Thêm thành công";
+            return new StudentRes();
         }
         private bool IsValidVietnameseName(string name)
         {
