@@ -13,28 +13,6 @@ namespace BT1_ScheduleStudent.Services
         {
             _context = context;
         }
-        public async Task<object> UpdateStudentAsync(int id, StudentReq Req)
-        {
-
-
-            var Student = await _context.Student
-                .Where(e => e.StudentID == id)
-                .FirstOrDefaultAsync();
-
-            if (Student == null)
-            {
-                return "Không tìm thấy sinh viên với ID này.";
-            }
-
-            Student.LastName = Req.LastName;
-            Student.FirstMidName = Req.FirstMidName;
-            Student.EnrollmentDate = Req.EnrollmentDate;
-
-            await _context.SaveChangesAsync();
-
-            return new StudentRes();
-        }
-
 
         // Get All Student
         public async Task<IEnumerable<StudentRes>> GetAllStudentsAsync()
@@ -128,7 +106,7 @@ namespace BT1_ScheduleStudent.Services
             _context.Student.Add(Student);
             await _context.SaveChangesAsync();
 
-            return "";
+            return "Thêm thành công";
         }
         private bool IsValidVietnameseName(string name)
         {
