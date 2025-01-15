@@ -199,7 +199,7 @@ namespace BT1_ScheduleStudent.Services
             _context.Student.Add(Student);
             await _context.SaveChangesAsync();
 
-            return "";
+            return "Thêm thành công";
         }
     }
 }
