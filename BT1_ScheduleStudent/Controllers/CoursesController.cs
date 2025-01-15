@@ -3,6 +3,7 @@ using BT1_ScheduleStudent.Response;
 using BT1_ScheduleStudent.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 
 namespace BT1_ScheduleStudent.Controllers
 {
@@ -35,7 +36,7 @@ namespace BT1_ScheduleStudent.Controllers
                 return BadRequest(errorMessage);
             }
 
-            return Ok(response);
+            return Ok("Thêm thành công");
         }
 
         // GET: api/Courses/5
