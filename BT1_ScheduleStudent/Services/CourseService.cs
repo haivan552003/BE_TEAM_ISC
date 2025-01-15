@@ -143,7 +143,12 @@ namespace BT1_ScheduleStudent.Services
 
             await _context.SaveChangesAsync();
 
-            return new CourseRes();
+            return new CourseRes
+            {
+                CourseID = Course.CourseID,
+                Title = Course.Title,
+                Creadits = Course.Creadits,
+            };
         }
 
         // Delete Course
